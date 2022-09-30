@@ -8,12 +8,20 @@ public class State {
     char[][] board;
     int[] agentX, agentY;
     int[] score;
-    int turn = 0;
+    int turn;
     int food;
+    int boardLine;
 
     Vector<String> moves;
 
-    int boardLine = 0;
+    public State(){
+        moves = new Vector<String>();
+        agentY = new int[2];
+        agentX = new int[2];
+        score = new int[2];
+        turn = 0;
+        boardLine = 0;
+    }
 
     public void read(String filePath) {
         try {
@@ -41,13 +49,13 @@ public class State {
 
                     //Initialize agent positions
                     if(charCharacters[col] == 'A'){
-                        this.agentY = new int[2];
-                        this.agentX = new int[2];
                         this.agentX[0] = boardLine;
                         this.agentY[0] = col;
                     } else if(charCharacters[col] == 'B'){
                         this.agentX[1] = boardLine;
                         this.agentY[1] = col;
+                    } else if(charCharacters[col] == '*'){
+                        this.food++;
                     }
                     //System.out.print(this.board[boardLine][col]);
                 }
@@ -70,12 +78,15 @@ public class State {
             }
             System.out.println();
         }
-        System.out.print(this.agentX[0]);
-        System.out.println(this.agentY[0]);
-        System.out.print(this.agentX[1]);
-        System.out.println(this.agentY[1]);
+        String positionString = "";
+        positionString += "Positie agent A: ";
+        positionString += this.agentX[0] + ", ";
+        positionString += this.agentY[0] +"\n";
+        positionString +="Positie agent B: ";
+        positionString +=this.agentX[1]+ ", ";
+        positionString +=this.agentY[1];
 
-        return null;
+        return positionString;
     }
 
     public State copy() {
@@ -90,10 +101,6 @@ public class State {
         Vector<String> possibleActions = new Vector<String>();
         char row = (char)this.agentX[agent];
         char column = (char)this.agentY[agent];
-//        char row = (char)1;
-//        char column = (char)3;
-        System.out.println(this.agentX[agent]);
-        System.out.println(this.agentY[agent]);
         if (board[row][column-1] != '#') {
             possibleActions.add("LEFT");
         }if (board[row][column+1] != '#') {
@@ -115,6 +122,7 @@ public class State {
     }
 
     public void execute(String action) {
+        System.out.println("The turn is at agent: "+turn);
         switch (action){
             case "LEFT":
                 this.agentY[turn] = this.agentY[turn]-1;
@@ -130,6 +138,7 @@ public class State {
                 break;
             case "EAT":
                 this.board[(char)this.agentX[turn]][(char)this.agentY[turn]] = ' ';
+                this.food--;
                 break;
             case "BLOCK":
                 this.board[(char)this.agentX[turn]][(char)this.agentY[turn]] = '#';
@@ -137,9 +146,37 @@ public class State {
             default:
                 break;
         }
+        this.turn = turn==0 ? 1: 0;
     }
 
     public boolean isLeaf() {
-        return true;
+        Vector<String> legalMoves = legalMoves(turn);
+        if(legalMoves.isEmpty()){
+            return true;
+        }else if(food == 0){
+            return true;
+        }
+        return false;
+    }
+    public double value(int agent){
+        //Define int of other agent
+        int otherAgent = agent==0 ? 1: 0;
+
+        if(score[agent]>score[otherAgent]){
+            System.out.println("Agent "+agent+ " won the game");
+            return 1.0;
+        }else if(legalMoves(agent).size()>legalMoves(otherAgent).size()){
+            System.out.println("Agent "+agent+ " won the game");
+            return 1.0;
+        } else if(legalMoves(agent).size()<legalMoves(otherAgent).size()){
+            System.out.println("Agent "+ otherAgent+ " won the game");
+            return -1.0;
+        }else if(score[agent]<score[otherAgent]){
+            System.out.println("Agent "+otherAgent+ " won the game");
+            return -1.0;
+        } else{
+            System.out.println("Gelijkspel of nog in de game");
+            return 0;
+        }
     }
 }
