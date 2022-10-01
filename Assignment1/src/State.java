@@ -101,7 +101,9 @@ public class State {
         Vector<String> possibleActions = new Vector<String>();
         char row = (char)this.agentX[agent];
         char column = (char)this.agentY[agent];
-        if (board[row][column-1] != '#') {
+        if (board[row][column] == '*') {
+            possibleActions.add("EAT");
+        }if (board[row][column-1] != '#') {
             possibleActions.add("LEFT");
         }if (board[row][column+1] != '#') {
             possibleActions.add("RIGHT");
@@ -109,8 +111,6 @@ public class State {
             possibleActions.add("UP");
         }if (board[row + 1][column] != '#') {
             possibleActions.add("DOWN");
-        }if (board[row][column] == '*') {
-            possibleActions.add("EAT");
         }if (board[row][column] == ' ' ||board[row][column] == 'A' || board[row][column] =='B') {
             possibleActions.add("BLOCK");
         }
@@ -138,6 +138,7 @@ public class State {
                 break;
             case "EAT":
                 this.board[(char)this.agentX[turn]][(char)this.agentY[turn]] = ' ';
+                this.score[turn] +=1;
                 this.food--;
                 break;
             case "BLOCK":
@@ -165,10 +166,10 @@ public class State {
         if(score[agent]>score[otherAgent]){
             System.out.println("Agent "+agent+ " won the game");
             return 1.0;
-        }else if(legalMoves(agent).size()>legalMoves(otherAgent).size()){
+        }else if(legalMoves(otherAgent).size()==0){
             System.out.println("Agent "+agent+ " won the game");
             return 1.0;
-        } else if(legalMoves(agent).size()<legalMoves(otherAgent).size()){
+        } else if(legalMoves(agent).size()==0){
             System.out.println("Agent "+ otherAgent+ " won the game");
             return -1.0;
         }else if(score[agent]<score[otherAgent]){
