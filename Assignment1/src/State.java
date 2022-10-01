@@ -92,8 +92,14 @@ public class State {
     public State copy() {
         State state = new State();
         state.board = this.board;
+        state.boardWith = this.boardWith;
+        state.boardHeight = this.boardHeight;
         state.agentX = this.agentX;
-
+        state.agentY = this.agentY;
+        state.food = this.food;
+//        System.out.println("===============");
+//        System.out.println(state);
+//        System.out.println("===============");
         return state;
     }
 
@@ -123,6 +129,7 @@ public class State {
 
     public void execute(String action) {
         System.out.println("The turn is at agent: "+turn);
+        System.out.println("Agent chose to do action: " + action);
         switch (action){
             case "LEFT":
                 this.agentY[turn] = this.agentY[turn]-1;
@@ -162,6 +169,7 @@ public class State {
     public double value(int agent){
         //Define int of other agent
         int otherAgent = agent==0 ? 1: 0;
+        System.out.println("-------------------------------");
 
         if(score[agent]>score[otherAgent]){
             System.out.println("Agent "+agent+ " won the game");
