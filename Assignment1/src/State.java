@@ -147,7 +147,7 @@ public class State {
             default:
                 break;
         }
-        this.turn = turn==0 ? 1: 0;
+//        this.turn = turn==0 ? 1: 0;
     }
 
     public boolean isLeaf() {
