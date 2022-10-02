@@ -39,9 +39,9 @@ public class Game {
                 stateCopy.turn = forAgent;
                 stateCopy.execute(move);
                 System.out.println(stateCopy.toString());
-                if (stateCopy.score[forAgent] > 0) {
+//                if (stateCopy.score[forAgent] > 0) {
 //                    System.out.println("FOOD EATEN");
-                }
+//                }
                 State currentState = minimax(stateCopy, 1, maxDepth, depth + 1);
             }
 //            stateCopy.moves.add(tempBestMove);
