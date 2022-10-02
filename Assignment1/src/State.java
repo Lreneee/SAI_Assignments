@@ -90,17 +90,28 @@ public class State {
     }
 
     public State copy() {
-        State state = new State();
-        state.board = this.board;
-        state.boardWith = this.boardWith;
-        state.boardHeight = this.boardHeight;
-        state.agentX = this.agentX;
-        state.agentY = this.agentY;
-        state.food = this.food;
-//        System.out.println("===============");
-//        System.out.println(state);
-//        System.out.println("===============");
-        return state;
+        char[][] newBoard = new char[boardHeight][boardHeight];
+        int[] newAgentX, newAgentY, score;
+        int food;
+
+        for (int row = 0; row < boardHeight; row++){
+            for (int col = 0; col < boardWith; col++){
+                newBoard[row][col] = this.board[row][col];
+            }
+        }
+        newAgentX = new int[]{this.agentX[0], this.agentX[1]};
+        newAgentY = new int[]{this.agentY[0], this.agentY[1]};
+        score = new int[]{this.score[0], this.score[1]};
+        State newState = new State();
+
+        newState.board = newBoard;
+        newState.boardWith = this.boardWith;
+        newState.boardHeight = this.boardHeight;
+        newState.agentX = newAgentX;
+        newState.agentY = newAgentY;
+        newState.score = score;
+        newState.food = this.food;
+        return newState;
     }
 
     public Vector<String> legalMoves(int agent) {
@@ -162,41 +173,6 @@ public class State {
         }
 //        this.turn = turn==0 ? 1: 0;
     }
-    public void oppositeExecute(String action) {
-        System.out.println("The turn is at agent: "+turn);
-        System.out.println("Agent chose to do action: " + action);
-        switch (action){
-            case "LEFT":
-                this.agentY[turn] = this.agentY[turn]+1;
-                this.moves.remove("LEFT");
-                break;
-            case "RIGHT":
-                this.agentY[turn] = this.agentY[turn]-1;
-                this.moves.remove("RIGHT");
-                break;
-            case "UP":
-                this.agentX[turn] = this.agentX[turn]+1;
-                this.moves.remove("UP");
-                break;
-            case "DOWN":
-                this.agentX[turn] = this.agentX[turn]-1;
-                this.moves.remove("DOWN");
-                break;
-            case "EAT":
-                this.board[(char)this.agentX[turn]][(char)this.agentY[turn]] = '*';
-                this.moves.remove("EAT");
-                this.score[turn] -=1;
-                this.food++;
-                break;
-            case "BLOCK":
-                this.board[(char)this.agentX[turn]][(char)this.agentY[turn]] = ' ';
-                this.moves.remove("BLOCK");
-                break;
-            default:
-                break;
-        }
-//        this.turn = turn==0 ? 1: 0;
-    }
 
     public boolean isLeaf() {
         Vector<String> legalMoves = legalMoves(turn);
@@ -212,10 +188,7 @@ public class State {
         int otherAgent = agent==0 ? 1: 0;
         System.out.println("-------------------------------");
 
-        if(score[agent]>score[otherAgent]){
-            System.out.println("Agent "+agent+ " won the game");
-            return 1.0;
-        }else if(legalMoves(otherAgent).size()==0){
+        if(legalMoves(otherAgent).size()==0){
             System.out.println("Agent "+agent+ " won the game");
             return 1.0;
         } else if(legalMoves(agent).size()==0){
@@ -224,6 +197,9 @@ public class State {
         }else if(score[agent]<score[otherAgent]){
             System.out.println("Agent "+otherAgent+ " won the game");
             return -1.0;
+        }else if(score[agent]>score[otherAgent]){
+            System.out.println("Agent "+agent+ " won the game");
+            return 1.0;
         } else{
             System.out.println("Gelijkspel of nog in de game");
             return 0;
