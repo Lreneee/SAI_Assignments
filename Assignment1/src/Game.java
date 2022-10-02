@@ -27,8 +27,8 @@ public class Game {
         stateCopy.turn = forAgent;
         double boardVal = stateCopy.value(forAgent);
         boolean leafReached = stateCopy.isLeaf();
-//        if (depth == maxDepth || boardVal ==1.0 || leafReached==true) {
-          if (depth == maxDepth || leafReached==true) {
+        
+          if (depth == maxDepth || leafReached==true || boardVal==1.0) {
             System.out.println("DEPTH REACHED");
             System.out.println("---------------------------------");
 //            s.toString();
@@ -46,18 +46,22 @@ public class Game {
                 stateCopy.turn = forAgent;
                 System.out.println("MAXIMIZING PLAYER");
                 int movePosition = legalMoves.indexOf(move);
-                String lastMove = legalMoves.get(movePosition);
+//                String lastMove = legalMoves.get(movePosition);
                 stateCopy.execute(move);
                 System.out.println(stateCopy.toString());
+                if(stateCopy.score[forAgent]>0){
+                    System.out.println("FOOD EATEN");
+                }
+
                 State currentState = minimax(stateCopy, 1, maxDepth, depth + 1);
                 System.out.println("LAST MOVE: "+legalMoves.get(movePosition));
                 stateCopy.oppositeExecute(move);
-                //Iets met een score doen die dus hoger en/of lager moet zijn dan de minimale of maximale waarde
 
-//                if(currentState.score[currentState.turn]>s.score[s.turn]){
-//
+                //If new score is higher than other score
+                //And the size, the moves it takes, is lower than the last one
+//                if(currentState.score[forAgent]>stateCopy.score[s.turn] && currentState.moves.size()<stateCopy.moves.size()){
+//                    return currentState;
 //                }
-//                stateCopy.board[(char) stateCopy.agentX[s.turn]][(char) stateCopy.agentY[s.turn]] = ' ';
             }
             stateCopy.moves.add(tempBestMove);
         } else{
@@ -65,12 +69,12 @@ public class Game {
                 stateCopy.turn = forAgent;
                 System.out.println("MINIMIZING PLAYER");
                 int movePosition = legalMoves.indexOf(move);
-                String lastMove = legalMoves.get(movePosition);
+//                String lastMove = legalMoves.get(movePosition);
                 stateCopy.execute(move);
                 System.out.println(stateCopy.toString());
                 State currentState = minimax(stateCopy, 0, maxDepth, depth + 1);
+                System.out.println("LAST MOVE: "+legalMoves.get(movePosition));
                 stateCopy.oppositeExecute(move);
-//                s.board[(char) s.agentX[s.turn]][(char) s.agentY[s.turn]] = ' ';
             }
             stateCopy.moves.add(tempBestMove);
         }

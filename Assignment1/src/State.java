@@ -107,10 +107,10 @@ public class State {
         Vector<String> possibleActions = new Vector<String>();
         char row = (char)this.agentX[agent];
         char column = (char)this.agentY[agent];
-        if (board[row][column] == '*') {
-            possibleActions.add("EAT");
-        }if (board[row][column-1] != '#') {
+        if (board[row][column-1] != '#') {
             possibleActions.add("LEFT");
+        }if (board[row][column] == '*') {
+            possibleActions.add("EAT");
         }if (board[row][column+1] != '#') {
             possibleActions.add("RIGHT");
         }if (board[row - 1][column] != '#') {
@@ -133,23 +133,29 @@ public class State {
         switch (action){
             case "LEFT":
                 this.agentY[turn] = this.agentY[turn]-1;
+                this.moves.add("LEFT");
                 break;
             case "RIGHT":
                 this.agentY[turn] = this.agentY[turn]+1;
+                this.moves.add("RIGHT");
                 break;
             case "UP":
                 this.agentX[turn] = this.agentX[turn]-1;
+                this.moves.add("UP");
                 break;
             case "DOWN":
                 this.agentX[turn] = this.agentX[turn]+1;
+                this.moves.add("DOWN");
                 break;
             case "EAT":
                 this.board[(char)this.agentX[turn]][(char)this.agentY[turn]] = ' ';
+                this.moves.add("EAT");
                 this.score[turn] +=1;
                 this.food--;
                 break;
             case "BLOCK":
                 this.board[(char)this.agentX[turn]][(char)this.agentY[turn]] = '#';
+                this.moves.add("BLOCK");
                 break;
             default:
                 break;
@@ -162,23 +168,29 @@ public class State {
         switch (action){
             case "LEFT":
                 this.agentY[turn] = this.agentY[turn]+1;
+                this.moves.remove("LEFT");
                 break;
             case "RIGHT":
                 this.agentY[turn] = this.agentY[turn]-1;
+                this.moves.remove("RIGHT");
                 break;
             case "UP":
                 this.agentX[turn] = this.agentX[turn]+1;
+                this.moves.remove("UP");
                 break;
             case "DOWN":
                 this.agentX[turn] = this.agentX[turn]-1;
+                this.moves.remove("DOWN");
                 break;
             case "EAT":
                 this.board[(char)this.agentX[turn]][(char)this.agentY[turn]] = '*';
+                this.moves.remove("EAT");
                 this.score[turn] -=1;
                 this.food++;
                 break;
             case "BLOCK":
                 this.board[(char)this.agentX[turn]][(char)this.agentY[turn]] = ' ';
+                this.moves.remove("BLOCK");
                 break;
             default:
                 break;
