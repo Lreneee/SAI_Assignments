@@ -156,6 +156,35 @@ public class State {
         }
 //        this.turn = turn==0 ? 1: 0;
     }
+    public void oppositeExecute(String action) {
+        System.out.println("The turn is at agent: "+turn);
+        System.out.println("Agent chose to do action: " + action);
+        switch (action){
+            case "LEFT":
+                this.agentY[turn] = this.agentY[turn]+1;
+                break;
+            case "RIGHT":
+                this.agentY[turn] = this.agentY[turn]-1;
+                break;
+            case "UP":
+                this.agentX[turn] = this.agentX[turn]+1;
+                break;
+            case "DOWN":
+                this.agentX[turn] = this.agentX[turn]-1;
+                break;
+            case "EAT":
+                this.board[(char)this.agentX[turn]][(char)this.agentY[turn]] = '*';
+                this.score[turn] -=1;
+                this.food++;
+                break;
+            case "BLOCK":
+                this.board[(char)this.agentX[turn]][(char)this.agentY[turn]] = ' ';
+                break;
+            default:
+                break;
+        }
+//        this.turn = turn==0 ? 1: 0;
+    }
 
     public boolean isLeaf() {
         Vector<String> legalMoves = legalMoves(turn);

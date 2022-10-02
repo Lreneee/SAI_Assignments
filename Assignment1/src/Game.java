@@ -5,7 +5,7 @@ public class Game {
 
     public Game() {
         b = new State();
-        b.read("Assignment1/data/board.txt");
+        b.read("data/board.txt");
     }
 
     public void test() {
@@ -45,9 +45,13 @@ public class Game {
             for(String move: legalMoves){
                 stateCopy.turn = forAgent;
                 System.out.println("MAXIMIZING PLAYER");
+                int movePosition = legalMoves.indexOf(move);
+                String lastMove = legalMoves.get(movePosition);
                 stateCopy.execute(move);
                 System.out.println(stateCopy.toString());
                 State currentState = minimax(stateCopy, 1, maxDepth, depth + 1);
+                System.out.println("LAST MOVE: "+legalMoves.get(movePosition));
+                stateCopy.oppositeExecute(move);
                 //Iets met een score doen die dus hoger en/of lager moet zijn dan de minimale of maximale waarde
 
 //                if(currentState.score[currentState.turn]>s.score[s.turn]){
@@ -60,9 +64,12 @@ public class Game {
             for(String move: legalMoves){
                 stateCopy.turn = forAgent;
                 System.out.println("MINIMIZING PLAYER");
+                int movePosition = legalMoves.indexOf(move);
+                String lastMove = legalMoves.get(movePosition);
                 stateCopy.execute(move);
                 System.out.println(stateCopy.toString());
                 State currentState = minimax(stateCopy, 0, maxDepth, depth + 1);
+                stateCopy.oppositeExecute(move);
 //                s.board[(char) s.agentX[s.turn]][(char) s.agentY[s.turn]] = ' ';
             }
             stateCopy.moves.add(tempBestMove);
