@@ -15,6 +15,7 @@ public class Main {
 //        System.out.print(boardString2);
 
 //        System.out.println(state.legalMoves(1));
+
         Game g=new Game();
         g.test();
     }
