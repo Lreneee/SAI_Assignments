@@ -9,7 +9,8 @@ public class Game {
     }
 
     public void test() {
-        System.out.println(minimax(b, b.turn, 3, 0));
+        State minimax = minimax(b, b.turn, 13, 0);
+        System.out.println("Best move to do for "+ b.turn+ " is "+ minimax.moves);
 
 //        while (!b.isLeaf()) {
 //            System.out.println(b.toString());
@@ -23,39 +24,73 @@ public class Game {
         boolean leafReached = s.isLeaf();
 
         if (depth == maxDepth || leafReached == true || boardVal == 1.0) {
-            System.out.println("DEPTH REACHED");
-            System.out.println("---------------------------------");
-//            s.toString();
+//            System.out.println("DEPTH REACHED");
+//            System.out.println("---------------------------------");
 
             return s;
         }
         s.turn = forAgent;
         Vector<String> legalMoves = s.legalMoves();
-        System.out.println(legalMoves);
+//        System.out.println(legalMoves);
 
         if (forAgent == 0) {
+            State currentStateMax = new State();
             for (String move : legalMoves) {
                 State stateCopy = s.copy();
                 stateCopy.turn = forAgent;
                 stateCopy.execute(move);
-                System.out.println(stateCopy.toString());
-//                if (stateCopy.score[forAgent] > 0) {
-//                    System.out.println("FOOD EATEN");
-//                }
-                State currentState = minimax(stateCopy, 1, maxDepth, depth + 1);
+//                System.out.println(stateCopy.toString());
+                currentStateMax = minimax(stateCopy, 1, maxDepth, depth + 1);
             }
-//            stateCopy.moves.add(tempBestMove);
+            return currentStateMax;
         } else {
+            State currentStateMin = new State();
             for (String move : legalMoves) {
                 State stateCopy = s.copy();
                 stateCopy.turn = forAgent;
-                System.out.println("MINIMIZING PLAYER");
+//                System.out.println("MINIMIZING PLAYER");
                 stateCopy.execute(move);
-                System.out.println(stateCopy.toString());
-                State currentState = minimax(stateCopy, 0, maxDepth, depth + 1);
+//                System.out.println(stateCopy.toString());
+                currentStateMin = minimax(stateCopy, 0, maxDepth, depth + 1);
             }
-//            stateCopy.moves.add(tempBestMove);
+            return currentStateMin;
         }
-        return null;
+    }
+    public State alfabeta(State s, int forAgent, int maxDepth, int depth, double alfa, double beta){
+        double boardVal = s.value(forAgent);
+        boolean leafReached = s.isLeaf();
+
+        if (depth == maxDepth || leafReached == true || boardVal == 1.0) {
+            return s;
+        }
+        s.turn = forAgent;
+        Vector<String> legalMoves = s.legalMoves();
+
+
+        if (forAgent == 0) {
+            State currentStateMax = new State();
+            for (String move : legalMoves) {
+                State stateCopy = s.copy();
+                stateCopy.turn = forAgent;
+                stateCopy.execute(move);
+                currentStateMax = minimax(stateCopy, 1, maxDepth, depth + 1);
+                if (alfa >= beta) {
+                    return currentStateMax;
+                }
+            }
+            return currentStateMax;
+        } else {
+            State currentStateMin = new State();
+            for (String move : legalMoves) {
+                State stateCopy = s.copy();
+                stateCopy.turn = forAgent;
+                stateCopy.execute(move);
+                currentStateMin = minimax(stateCopy, 0, maxDepth, depth + 1);
+                if (alfa <= beta) {
+                    return currentStateMin;
+                }
+            }
+            return currentStateMin;
+        }
     }
 }
