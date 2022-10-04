@@ -5,8 +5,8 @@ public class Game {
 
     public Game() {
         b = new State();
-        b.read("data/board.txt");
-//        b.read("Assignment1/data/board.txt");
+//        b.read("data/board.txt");
+        b.read("Assignment1/data/board.txt");
 
     }
 
@@ -48,7 +48,11 @@ public class Game {
             for (String move : legalMoves) {
                 State stateCopy = s.copy();
                 stateCopy.turn = forAgent;
+
+                //For debugging
+                System.out.println("-------------------------------");
                 System.out.println("Legal moves to do: " + legalMoves);
+
                 stateCopy.execute(move);
                 stateCopy.toString();
 
@@ -74,7 +78,11 @@ public class Game {
             for (String move : legalMoves) {
                 State stateCopy = s.copy();
                 stateCopy.turn = forAgent;
+
+                //For debugging
+                System.out.println("-------------------------------");
                 System.out.println("Legal moves to do: " + legalMoves);
+
                 stateCopy.execute(move);
                 stateCopy.toString();
 
@@ -84,9 +92,10 @@ public class Game {
                 if (currentStateValue <= min) {
                     newState = currentStateMin.copy();
 //                    newState.moves.add(currentStateMin.moves.get(0));
-                    System.out.println(s.moves);
+//                    System.out.println(s.moves);
 //                    String savingMove = currentStateMin.moves.get(0);
-                    s.moves.set(depth, move);
+                    newState.moves.set(depth, move);
+                    System.out.println(newState.moves);
                 }
             }
             return newState;

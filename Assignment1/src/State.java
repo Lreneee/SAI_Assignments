@@ -191,7 +191,6 @@ public class State {
     public double value(int agent){
         //Define int of other agent
         int otherAgent = agent==0 ? 1: 0;
-        System.out.println("-------------------------------");
 
         if(legalMoves(otherAgent).size()==0){
             System.out.println("Agent "+agent+ " won the game");
