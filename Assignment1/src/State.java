@@ -85,12 +85,13 @@ public class State {
         positionString +="Positie agent B: ";
         positionString +=this.agentX[1]+ ", ";
         positionString +=this.agentY[1];
+        System.out.println(positionString);
 
         return positionString;
     }
 
     public State copy() {
-        char[][] newBoard = new char[boardHeight][boardHeight];
+        char[][] newBoard = new char[boardHeight][boardWith];
         int[] newAgentX, newAgentY, score;
         int food;
 
@@ -111,6 +112,7 @@ public class State {
         newState.agentY = newAgentY;
         newState.score = score;
         newState.food = this.food;
+        newState.moves = this.moves;
         return newState;
     }
 
@@ -135,6 +137,7 @@ public class State {
     }
 
     public Vector<String> legalMoves() {
+
         return legalMoves(turn);
     }
 
