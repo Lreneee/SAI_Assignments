@@ -93,6 +93,7 @@ public class State {
     public State copy() {
         char[][] newBoard = new char[boardHeight][boardWith];
         int[] newAgentX, newAgentY, score;
+        Vector<String> newMoves;
         int food;
 
         for (int row = 0; row < boardHeight; row++){
@@ -102,6 +103,7 @@ public class State {
         }
         newAgentX = new int[]{this.agentX[0], this.agentX[1]};
         newAgentY = new int[]{this.agentY[0], this.agentY[1]};
+        newMoves = new Vector<String>(this.moves);
         score = new int[]{this.score[0], this.score[1]};
         State newState = new State();
 
@@ -112,7 +114,7 @@ public class State {
         newState.agentY = newAgentY;
         newState.score = score;
         newState.food = this.food;
-        newState.moves = this.moves;
+        newState.moves = newMoves;
         return newState;
     }
 
@@ -147,29 +149,29 @@ public class State {
         switch (action){
             case "LEFT":
                 this.agentY[turn] = this.agentY[turn]-1;
-                this.moves.add("LEFT");
+//                this.moves.add("LEFT");
                 break;
             case "RIGHT":
                 this.agentY[turn] = this.agentY[turn]+1;
-                this.moves.add("RIGHT");
+//                this.moves.add("RIGHT");
                 break;
             case "UP":
                 this.agentX[turn] = this.agentX[turn]-1;
-                this.moves.add("UP");
+//                this.moves.add("UP");
                 break;
             case "DOWN":
                 this.agentX[turn] = this.agentX[turn]+1;
-                this.moves.add("DOWN");
+//                this.moves.add("DOWN");
                 break;
             case "EAT":
                 this.board[(char)this.agentX[turn]][(char)this.agentY[turn]] = ' ';
-                this.moves.add("EAT");
+//                this.moves.add("EAT");
                 this.score[turn] +=1;
                 this.food--;
                 break;
             case "BLOCK":
                 this.board[(char)this.agentX[turn]][(char)this.agentY[turn]] = '#';
-                this.moves.add("BLOCK");
+//                this.moves.add("BLOCK");
                 break;
             default:
                 break;
@@ -197,10 +199,10 @@ public class State {
         } else if(legalMoves(agent).size()==0){
             System.out.println("Agent "+ otherAgent+ " won the game");
             return -1.0;
-        }else if(score[agent]<score[otherAgent] && food==0){
+        }else if(score[agent]<score[otherAgent] ){  //&& food==0
             System.out.println("Agent "+otherAgent+ " won the game");
             return -1.0;
-        }else if(score[agent]>score[otherAgent]&& food==0){
+        }else if(score[agent]>score[otherAgent]){     //&& food==0
             System.out.println("Agent "+agent+ " won the game");
             return 1.0;
         } else{

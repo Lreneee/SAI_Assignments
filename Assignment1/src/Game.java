@@ -5,13 +5,13 @@ public class Game {
 
     public Game() {
         b = new State();
-        b.read("data/board.txt");
-//        b.read("Assignment1/data/board44.txt");
+//        b.read("data/board.txt");
+        b.read("Assignment1/data/board.txt");
 
     }
 
     public void test() {
-        State minimax = minimax(b, b.turn, 4, 0);
+        State minimax = minimax(b, b.turn, 3, 0);
         System.out.println("Best move to do for " + b.turn + " is " + minimax.moves);
 
 //        State alfabeta = alfabeta(b, b.turn, 13, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
@@ -28,11 +28,11 @@ public class Game {
         double boardVal = s.value(forAgent);
         boolean leafReached = s.isLeaf();
 
-//        if (s.moves.size() < 1){
-//            for(int i = 0;i < maxDepth; i++){
-//                s.moves.add(null);
-//            }
-//        }
+        if (s.moves.size() < 1){
+            for(int i = 0;i < maxDepth; i++){
+                s.moves.add(null);
+            }
+        }
 
         if (depth == maxDepth || leafReached == true || boardVal == 1.0 || boardVal==-1) {
             return s;
@@ -58,9 +58,10 @@ public class Game {
                 if (currentStateValue >= max) {
                     newState = currentStateMax.copy();
 //                    newState.moves.add(currentStateMax.moves.get(0));
-//                    System.out.println(s.moves);
-//                    String savingMove = currentStateMax.moves.get(0);
-//                    s.moves.set(depth, currentStateMax.moves.get(0));
+//                    System.out.println("Depth: " + depth);
+//                    System.out.println("Executed move: " + move);
+                    newState.moves.set(depth, move);
+                    System.out.println(newState.moves);
                 }
             }
             return newState;
@@ -83,9 +84,9 @@ public class Game {
                 if (currentStateValue <= min) {
                     newState = currentStateMin.copy();
 //                    newState.moves.add(currentStateMin.moves.get(0));
-//                    System.out.println(s.moves);
+                    System.out.println(s.moves);
 //                    String savingMove = currentStateMin.moves.get(0);
-//                    s.moves.set(depth, currentStateMin.moves.get(0));
+                    s.moves.set(depth, move);
                 }
             }
             return newState;
