@@ -5,8 +5,8 @@ public class Game {
 
     public Game() {
         b = new State();
-//        b.read("data/board.txt");
-        b.read("Assignment1/data/board.txt");
+        b.read("data/board.txt");
+//        b.read("Assignment1/data/board.txt");
 
     }
 
