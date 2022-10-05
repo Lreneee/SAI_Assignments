@@ -5,13 +5,13 @@ public class Game {
 
     public Game() {
         b = new State();
-//        b.read("data/board.txt");
-        b.read("Assignment1/data/board.txt");
+        b.read("data/board44.txt");
+//        b.read("Assignment1/data/board.txt");
 
     }
 
     public void test() {
-        State minimax = minimax(b, b.turn, 3, 0);
+        State minimax = minimax(b, b.turn, 13, 0);
         System.out.println("Best move to do for " + b.turn + " is " + minimax.moves);
 
 //        State alfabeta = alfabeta(b, b.turn, 13, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
@@ -28,13 +28,7 @@ public class Game {
         double boardVal = s.value(forAgent);
         boolean leafReached = s.isLeaf();
 
-        if (s.moves.size() < 1){
-            for(int i = 0;i < maxDepth; i++){
-                s.moves.add(null);
-            }
-        }
-
-        if (depth == maxDepth || leafReached == true || boardVal == 1.0 || boardVal==-1) {
+        if (depth == maxDepth || leafReached == true || boardVal == 1.0 || boardVal == -1) {
             return s;
         }
         s.turn = forAgent;
@@ -61,15 +55,7 @@ public class Game {
                 double currentStateValue = currentStateMax.value(forAgent);
                 max = Math.max(max, (int) currentStateMax.value(forAgent));
                 if (currentStateValue >= max) {
-                    System.out.println("NewState moves max: " + newState.moves);
-                    if (newState.moves.isEmpty()){
-                        newState = currentStateMax.copy();
-                    }
-//                    newState.moves.add(currentStateMax.moves.get(0));
-//                    System.out.println("Depth: " + depth);
-//                    System.out.println("Executed move: " + move);
-                    newState.moves.set(depth, move);
-                    System.out.println(newState.moves);
+                    newState = currentStateMax.copy();
                 }
             }
             return newState;
@@ -94,15 +80,7 @@ public class Game {
                 double currentStateValue = currentStateMin.value(forAgent);
                 min = Math.max(min, (int) currentStateMin.value(forAgent));
                 if (currentStateValue <= min) {
-                    System.out.println("NewState moves min: " + newState.moves);
-                    if (newState.moves.isEmpty()){
-                        newState = currentStateMin.copy();
-                    }
-//                    newState.moves.add(currentStateMin.moves.get(0));
-//                    System.out.println(s.moves);
-//                    String savingMove = currentStateMin.moves.get(0);
-                    newState.moves.set(depth, move);
-                    System.out.println(newState.moves);
+                    newState = currentStateMin.copy();
                 }
             }
             return newState;
