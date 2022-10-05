@@ -205,7 +205,7 @@ public class State {
             System.out.println("Agent "+agent+ " won the game");
             return 1.0;
         } else{
-//            System.out.println("Gelijkspel of nog in de game");
+            System.out.println("Gelijkspel of nog in de game");
             return 0;
         }
     }

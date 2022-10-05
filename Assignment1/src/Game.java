@@ -5,17 +5,17 @@ public class Game {
 
     public Game() {
         b = new State();
-        b.read("data/board44.txt");
+        b.read("data/board.txt");
 //        b.read("Assignment1/data/board.txt");
 
     }
 
     public void test() {
-        State minimax = minimax(b, b.turn, 13, 0);
-        System.out.println("Best move to do for " + b.turn + " is " + minimax.moves);
+//        State minimax = minimax(b, b.turn, 9, 0);
+//        System.out.println("Best move to do for " + b.turn + " is " + minimax.moves);
 
-//        State alfabeta = alfabeta(b, b.turn, 13, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-//        System.out.println("Best move to do for "+ b.turn+ " is "+ alfabeta.moves);
+        State alfabeta = alfabeta(b, b.turn, 14, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        System.out.println("Best move to do for "+ b.turn+ " is "+ alfabeta.moves);
 
 //        while (!b.isLeaf()) {
 //            System.out.println(b.toString());
@@ -78,7 +78,7 @@ public class Game {
 
                 currentStateMin = minimax(stateCopy, 0, maxDepth, depth + 1);
                 double currentStateValue = currentStateMin.value(forAgent);
-                min = Math.max(min, (int) currentStateMin.value(forAgent));
+                min = Math.min(min, (int) currentStateMin.value(forAgent));
                 if (currentStateValue <= min) {
                     newState = currentStateMin.copy();
                 }
@@ -99,24 +99,32 @@ public class Game {
 
 
         if (forAgent == 0) {
+            int max = Integer.MIN_VALUE;
             State currentStateMax = new State();
+            State newState = new State();
+
             for (String move : legalMoves) {
                 State stateCopy = s.copy();
                 stateCopy.turn = forAgent;
-                int max = Integer.MIN_VALUE;
 
                 stateCopy.execute(move);
                 currentStateMax = alfabeta(stateCopy, 1, maxDepth, depth + 1, alfa, beta);
-                max = Math.max(max, (int) currentStateMax.value(0));
+                double currentStateValue = currentStateMax.value(forAgent);
+                max = Math.max(max, (int) currentStateMax.value(forAgent));
+                if (currentStateValue >= max) {
+                    newState = currentStateMax.copy();
+                }
                 alfa = Math.max(alfa, currentStateMax.value(forAgent));
                 System.out.println("ALFA: " + alfa);
                 if (alfa >= beta) {
-                    return currentStateMax;
+                    return newState;
                 }
             }
-            return currentStateMax;
+            return newState;
         } else {
             State currentStateMin = new State();
+            State newState = new State();
+
             for (String move : legalMoves) {
                 State stateCopy = s.copy();
                 stateCopy.turn = forAgent;
@@ -124,12 +132,17 @@ public class Game {
 
                 stateCopy.execute(move);
                 currentStateMin = alfabeta(stateCopy, 0, maxDepth, depth + 1, alfa, beta);
+                double currentStateValue = currentStateMin.value(forAgent);
+                min = Math.min(min, (int) currentStateMin.value(forAgent));
+                if (currentStateValue <= min) {
+                    newState = currentStateMin.copy();
+                }
                 beta = Math.min(beta, currentStateMin.value(forAgent));
-                if (alfa <= beta) {
-                    return currentStateMin;
+                if (beta <= alfa) {
+                    return newState;
                 }
             }
-            return currentStateMin;
+            return newState;
         }
     }
 }
