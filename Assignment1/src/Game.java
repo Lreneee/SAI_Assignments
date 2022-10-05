@@ -5,8 +5,8 @@ public class Game {
 
     public Game() {
         b = new State();
-        b.read("data/board44.txt");
-//        b.read("Assignment1/data/board.txt");
+//        b.read("data/board44.txt");
+        b.read("Assignment1/data/board44.txt");
 
     }
 
@@ -36,7 +36,7 @@ public class Game {
         if (forAgent == 0) {
             int max = Integer.MIN_VALUE;
 
-            State newState = new State();
+            State bestState = new State();
             Vector<String> legalMoves = s.legalMoves();
             State currentStateMax = new State();
 
@@ -55,16 +55,16 @@ public class Game {
                 double currentStateValue = currentStateMax.value(forAgent);
                 max = Math.max(max, (int) currentStateMax.value(forAgent));
                 if (currentStateValue >= max) {
-                    newState = currentStateMax.copy();
+                    bestState = currentStateMax.copy();
                 }
             }
-            return newState;
+            return bestState;
         } else {
             int min = Integer.MAX_VALUE;
-            State newState = new State();
+            State bestState = new State();
             Vector<String> legalMoves = s.legalMoves();
-
             State currentStateMin = new State();
+
             for (String move : legalMoves) {
                 State stateCopy = s.copy();
                 stateCopy.turn = forAgent;
@@ -80,10 +80,10 @@ public class Game {
                 double currentStateValue = currentStateMin.value(forAgent);
                 min = Math.max(min, (int) currentStateMin.value(forAgent));
                 if (currentStateValue <= min) {
-                    newState = currentStateMin.copy();
+                    bestState = currentStateMin.copy();
                 }
             }
-            return newState;
+            return bestState;
         }
     }
 
