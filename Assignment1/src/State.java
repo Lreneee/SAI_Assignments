@@ -198,7 +198,7 @@ public class State {
         } else if(legalMoves(agent).size()==0){
             System.out.println("Agent "+ otherAgent+ " won the game");
             return -1.0;
-        }else if(score[agent]<score[otherAgent] ){  //&& food==0
+        }else if(score[agent]<score[otherAgent]  ){  //&& food==0
             System.out.println("Agent "+otherAgent+ " won the game");
             return -1.0;
         }else if(score[agent]>score[otherAgent]){     //&& food==0

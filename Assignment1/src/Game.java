@@ -41,6 +41,7 @@ public class Game {
 
         if (forAgent == 0) {
             int max = Integer.MIN_VALUE;
+
             State newState = new State();
             Vector<String> legalMoves = s.legalMoves();
             State currentStateMax = new State();
@@ -60,7 +61,10 @@ public class Game {
                 double currentStateValue = currentStateMax.value(forAgent);
                 max = Math.max(max, (int) currentStateMax.value(forAgent));
                 if (currentStateValue >= max) {
-                    newState = currentStateMax.copy();
+                    System.out.println("NewState moves max: " + newState.moves);
+                    if (newState.moves.isEmpty()){
+                        newState = currentStateMax.copy();
+                    }
 //                    newState.moves.add(currentStateMax.moves.get(0));
 //                    System.out.println("Depth: " + depth);
 //                    System.out.println("Executed move: " + move);
@@ -90,7 +94,10 @@ public class Game {
                 double currentStateValue = currentStateMin.value(forAgent);
                 min = Math.max(min, (int) currentStateMin.value(forAgent));
                 if (currentStateValue <= min) {
-                    newState = currentStateMin.copy();
+                    System.out.println("NewState moves min: " + newState.moves);
+                    if (newState.moves.isEmpty()){
+                        newState = currentStateMin.copy();
+                    }
 //                    newState.moves.add(currentStateMin.moves.get(0));
 //                    System.out.println(s.moves);
 //                    String savingMove = currentStateMin.moves.get(0);
