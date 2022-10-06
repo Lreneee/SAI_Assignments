@@ -191,21 +191,20 @@ public class State {
     public double value(int agent){
         //Define int of other agent
         int otherAgent = agent==0 ? 1: 0;
-
-        if(legalMoves(otherAgent).size()==0){
-            System.out.println("Agent "+agent+ " won the game");
-            return 1.0;
-        }else if(legalMoves(agent).size()==0){
-            System.out.println("Agent "+ otherAgent+ " won the game");
+        if(food==0){
+            if(score[agent]>score[otherAgent]){
+                return 1.0;
+            }else if(score[otherAgent]>score[agent]){
+                return -1.0;
+            } else{
+                return 0;
+            }
+        }
+        if(legalMoves(agent).isEmpty()){
             return -1.0;
-        }else if(score[agent]<score[otherAgent]&&food==0){  //&& food==0
-            System.out.println("Agent "+otherAgent+ " won the game");
-            return -1.0;
-        }else if(score[agent]>score[otherAgent]&&food==0){     //&& food==0
-            System.out.println("Agent "+agent+ " won the game");
+        } else if(legalMoves(otherAgent).isEmpty()){
             return 1.0;
-        } else{
-            System.out.println("Gelijkspel of nog in de game");
+        } else {
             return 0;
         }
     }

@@ -11,11 +11,11 @@ public class Game {
     }
 
     public void test() {
-//        State minimax = minimax(b, b.turn, 9, 0);
+//        State minimax = minimax(b, b.turn, 11, 0);
 //        System.out.println("Best move to do for " + b.turn + " is " + minimax.moves);
 
-        State alfabeta = alfabeta(b, b.turn, 14, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        System.out.println("Best move to do for "+ b.turn+ " is "+ alfabeta.moves);
+        State alfabeta = alfabeta(b, b.turn, 13, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        System.out.println("Best move to do for " + b.turn + " is " + alfabeta.moves);
 
 //        while (!b.isLeaf()) {
 //            System.out.println(b.toString());
@@ -91,7 +91,7 @@ public class Game {
         double boardVal = s.value(forAgent);
         boolean leafReached = s.isLeaf();
 
-        if (depth == maxDepth || leafReached == true || boardVal == 1.0) {
+        if (depth == maxDepth || leafReached == true) {
             return s;
         }
         s.turn = forAgent;
@@ -115,7 +115,6 @@ public class Game {
                     newState = currentStateMax.copy();
                 }
                 alfa = Math.max(alfa, currentStateMax.value(forAgent));
-                System.out.println("ALFA: " + alfa);
                 if (alfa >= beta) {
                     return newState;
                 }
