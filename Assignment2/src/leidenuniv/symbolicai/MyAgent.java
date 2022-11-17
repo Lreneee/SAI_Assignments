@@ -2,6 +2,7 @@ package leidenuniv.symbolicai;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import leidenuniv.symbolicai.logic.KB;
@@ -15,6 +16,10 @@ public class MyAgent extends Agent {
 
 	@Override
 	public KB forwardChain(KB kb) {
+		KB newKB = new KB(); 
+		for(Sentence sentence:kb.rules()){
+		
+		}
 		//This method should perform a forward chaining on the kb given as argument, until no new facts are added to the KB.
 		//It starts with an empty list of facts. When ready, it returns a new KB of ground facts (bounded).
 		//The resulting KB includes all deduced predicates, actions, additions and deletions, and goals.
@@ -34,9 +39,44 @@ public class MyAgent extends Agent {
 		//substitution is the one we are currently building recursively.
 		//conditions is the list of conditions you  still need to find a subst for (this list shrinks the further you get in the recursion).
 		//facts is the list of predicates you need to match against (find substitutions so that a predicate form the conditions unifies with a fact)
-
+		// if(conditions.size() < 1){
+		// 	return false;
+		// } 
+		if(conditions.isEmpty()){
+			if(!allSubstitutions.isEmpty()){
+				return true; 
+			}
+		}
+		for(Predicate condition:conditions){
+			if(condition.toString().startsWith("!=")){
+				System.out.println("Starts with !="); 
+				for(Term term:condition.getTerms()){
+					for(HashMap h:allSubstitutions){
+						
+					}
+				}
+				return false; 
+			} else if(condition.toString().startsWith("=")){
+				System.out.println("Starts with ="); 
+				return false; 
+			}
+			Predicate result = substitute(condition, substitution); 
+			System.out.println("RESULT "+result);
+			for(Predicate unifiedValue:facts.values()){
+				System.out.println(unifiedValue);
+				HashMap unifiedMap= unifiesWith(result, unifiedValue);
+				//System.out.println(unifiedMap);
+				System.out.println(unifiedMap);
+				substitution=unifiedMap;
+				//System.out.println(substitution);
+				conditions.remove(condition); 
+				findAllSubstitions(allSubstitutions, substitution, conditions, facts); 
+				//allSubstitutions.add(unifiedMap); 
+			}
+			return true;
+		}
 		return false;
-	}
+	} 
 
 	@Override
 	public HashMap<String, String> unifiesWith(Predicate p, Predicate f) {
@@ -46,14 +86,41 @@ public class MyAgent extends Agent {
 		//Please note because f is bound and p potentially contains the variables, unifiesWith is NOT symmetrical
 		//So: unifiesWith("human(X)","human(joost)") returns X=joost, while unifiesWith("human(joost)","human(X)") returns null 
 		//If no subst is found it returns null
-		return null;
+		HashMap map = new HashMap<String, String>();
+		int index = 0;
+		if(f.bound()){
+			if(p.getTerms().size()==f.getTerms().size()){
+				for(Term pterm:p.getTerms()){
+					if(pterm.toString().length()==1){
+						Term fterm = f.getTerm(index); 
+						map.put(pterm.toString(), fterm.toString());
+						index++;
+					} else{
+						index++;
+					}
+				}
+				return map; 
+			} else{
+				return null; 
+			}
+		}else{
+			return null; 
+		}
 	}
 
 	@Override
 	public Predicate substitute(Predicate old, HashMap<String, String> s) {
 		// Substitutes all variable terms in predicate <old> for values in substitution <s>
 		//(only if a key is present in s matching the variable name of course)
-		//Use Term.substitute(s)
+		//Use Term.substitute(s) 
+		boolean hasTerms = old.hasTerms(); 
+		if(hasTerms){
+			for(Term term:old.getTerms()){
+				term.substitute(s); 
+			}
+			Predicate newPredicate = old; 
+			return newPredicate; 
+		}
 		return null;
 	}
 

@@ -6,4 +6,8 @@
 #Actions are not used during inference as new facts (i.e., they cannot unify with the knowledge base), 
 #They are processed by the agent as new facts into the appropriate knowledge bases (beliefs, desires, intentions).
 #The exception is the addition action, of which the predicate is added to the facts during inference.
-#Add your program rules below:
+#Add your program rules below
+at(X)&key(K)>_grab(X,K)
+at(X)&locked(K)&key(K)>_open(X,K)
+at(X)&link(X,Y)>_goto(Y)
+ 
