@@ -45,30 +45,42 @@ public class MyAgent extends Agent {
 				Vector<Predicate> newConditions  = new Vector<Predicate>();
 				for(Predicate condition:conditions){
 					newConditions.add(condition);
-				}
-				HashMap newHashmap = new HashMap<String, String>(); 
-				newHashmap = substitution; 
+				} 
+				//Copy of substitution hashmap
+				HashMap newHashmap = new HashMap<String, String>();
+				for (Map.Entry<String, String> element:substitution.entrySet()) {
+					newHashmap.put(element.getKey(), element.getValue()); 
+		   		}
+
+				//Result by substitute with given substitutions
 				System.out.println(conditions.get(0)); 
 				Predicate result = substitute(conditions.get(0), substitution); 
-				System.out.println(result); 
-				System.out.println(unifiedValue);
-				HashMap unifiedMap= unifiesWith(result, unifiedValue);
-				System.out.println(unifiedMap);
-				substitution.putAll(unifiedMap);
+				System.out.println(result.not()); 
+				if(result.eql()){
 
-				//als die niet unificeerrt, iets doen, alleen doen als die wel unificeert
-				System.out.println("SUBSTITUTION"+substitution);
-				newConditions.remove(0); 
+				}
+				//Unification with function unifiesWith
+				HashMap unifiedMap= unifiesWith(result, unifiedValue);
+				if(unifiedMap!=null){
+					newHashmap.putAll(unifiedMap);
+				}
 				
-				// conditions.remove(condition); 
+				//als die niet unificeerrt, iets doen, alleen doen als die wel unificeert
+				System.out.println("SUBSTITUTION"+newHashmap);
+
+				//Remove condition from newConditions, and give this to the recursion
+				newConditions.remove(0); 
 				findAllSubstitions(allSubstitutions, newHashmap, newConditions, facts); 
 			}
 		} else{
-			System.out.println("CONDITIONS EMPTY");
 			allSubstitutions.add(substitution);
 			System.out.println(allSubstitutions);
 		}
-		return false; 
+		if(!allSubstitutions.isEmpty()){
+			return true; 
+		}else{
+			return false; 
+		}
 	} 
 
 	@Override

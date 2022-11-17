@@ -52,7 +52,7 @@ public abstract class Agent {
 		if (DEBUG) System.out.println("PERCEPTS:\n"+percepts);
 		Predicate newpred = new Predicate("parent(X,Y)");
 		Predicate predpred = new Predicate("parent(X,Z)");
-		// Predicate otherpred = new Predicate("!=(Y,Z)");
+		Predicate otherpred = new Predicate("!=(Y,Z)");
 
 		Predicate newpredFact = new Predicate("parent(joost,irene)");
 		Predicate newpredFact2 = new Predicate("parent(joost,chris)");
@@ -68,7 +68,7 @@ public abstract class Agent {
 		Vector<Predicate> condition = new Vector<Predicate>();
 		condition.add(newpred);
 		condition.add(predpred);
-		// condition.add(otherpred);
+		condition.add(otherpred);
 		System.out.println(condition);
 
 		HashMap<String, String> substitution = new HashMap<String, String>();
