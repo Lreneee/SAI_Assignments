@@ -39,43 +39,36 @@ public class MyAgent extends Agent {
 		//substitution is the one we are currently building recursively.
 		//conditions is the list of conditions you  still need to find a subst for (this list shrinks the further you get in the recursion).
 		//facts is the list of predicates you need to match against (find substitutions so that a predicate form the conditions unifies with a fact)
-		// if(conditions.size() < 1){
-		// 	return false;
-		// } 
-		if(conditions.isEmpty()){
-			if(!allSubstitutions.isEmpty()){
-				return true; 
-			}
-		}
-		for(Predicate condition:conditions){
-			if(condition.toString().startsWith("!=")){
-				System.out.println("Starts with !="); 
-				for(Term term:condition.getTerms()){
-					for(HashMap h:allSubstitutions){
-						
-					}
-				}
-				return false; 
-			} else if(condition.toString().startsWith("=")){
-				System.out.println("Starts with ="); 
-				return false; 
-			}
-			Predicate result = substitute(condition, substitution); 
-			System.out.println("RESULT "+result);
+		if(!conditions.isEmpty() && !conditions.get(0).bound()){
 			for(Predicate unifiedValue:facts.values()){
+				//Copy of conditions
+				Vector<Predicate> newConditions  = new Vector<Predicate>();
+				for(Predicate condition:conditions){
+					newConditions.add(condition);
+				}
+				HashMap newHashmap = new HashMap<String, String>(); 
+				newHashmap = substitution; 
+				System.out.println(conditions.get(0)); 
+				Predicate result = substitute(conditions.get(0), substitution); 
+				System.out.println(result); 
 				System.out.println(unifiedValue);
 				HashMap unifiedMap= unifiesWith(result, unifiedValue);
-				//System.out.println(unifiedMap);
 				System.out.println(unifiedMap);
-				substitution=unifiedMap;
-				//System.out.println(substitution);
-				conditions.remove(condition); 
-				findAllSubstitions(allSubstitutions, substitution, conditions, facts); 
-				//allSubstitutions.add(unifiedMap); 
+				substitution.putAll(unifiedMap);
+
+				//als die niet unificeerrt, iets doen, alleen doen als die wel unificeert
+				System.out.println("SUBSTITUTION"+substitution);
+				newConditions.remove(0); 
+				
+				// conditions.remove(condition); 
+				findAllSubstitions(allSubstitutions, newHashmap, newConditions, facts); 
 			}
-			return true;
+		} else{
+			System.out.println("CONDITIONS EMPTY");
+			allSubstitutions.add(substitution);
+			System.out.println(allSubstitutions);
 		}
-		return false;
+		return false; 
 	} 
 
 	@Override
@@ -89,7 +82,7 @@ public class MyAgent extends Agent {
 		HashMap map = new HashMap<String, String>();
 		int index = 0;
 		if(f.bound()){
-			if(p.getTerms().size()==f.getTerms().size()){
+			if(p.getName().equals(f.getName())&&p.getTerms().size()==f.getTerms().size()){
 				for(Term pterm:p.getTerms()){
 					if(pterm.toString().length()==1){
 						Term fterm = f.getTerm(index); 
