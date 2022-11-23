@@ -39,7 +39,7 @@ public abstract class Agent {
 		intentions=new KB(); //clear the list of intentions (=possible actions), as we start a cycle
 		sense(w);
 		think(believes,desires,intentions);
-		act(w, decide(HUMAN_DECISION), believes, desires);
+		//act(w, decide(HUMAN_DECISION), believes, desires);
 	}
 	public void sense(Maze w) {
 		//The world generates percepts for you every cycle
@@ -50,37 +50,10 @@ public abstract class Agent {
 		//You process this list using Agent.processFacts()
 		KB percepts=w.generatePercepts();
 		if (DEBUG) System.out.println("PERCEPTS:\n"+percepts);
-		Predicate newpred = new Predicate("parent(X,Y)");
-		Predicate predpred = new Predicate("parent(X,Z)");
-		Predicate otherpred = new Predicate("!=(Y,Z)");
-
-		Predicate newpredFact = new Predicate("parent(joost,irene)");
-		Predicate newpredFact2 = new Predicate("parent(joost,chris)");
-		//Predicate newpredFact3 = new Predicate("parent(chris,joost)");
-
-		HashMap<String, Predicate> facts = new HashMap<String, Predicate>();
-		facts.put(newpredFact.toString(), newpredFact);
-		facts.put(newpredFact2.toString(), newpredFact2);
-		//facts.put(newpredFact3.toString(), newpredFact3); 
-		// facts.put(otherpredFact.toString(), otherpredFact);
-		// facts.put(otherpredFact2.toString(), otherpredFact2);
-
-		Vector<Predicate> condition = new Vector<Predicate>();
-		condition.add(newpred);
-		condition.add(predpred);
-		condition.add(otherpred);
-		System.out.println(condition);
-
-		HashMap<String, String> substitution = new HashMap<String, String>();
-
-		Collection<HashMap<String, String>> allSubstitutions = new HashSet<HashMap<String, String>>();
-
-		boolean yes = findAllSubstitions(allSubstitutions, substitution, condition,facts);
-	
-		//HashMap result = unifiesWith(newpred, filledpred); 
-
-		System.out.println(yes); 
-		//KB result=forwardChain(perceptRules.union(percepts).union(believes)); 
+		
+		System.out.println(perceptRules.union(percepts).union(believes));
+		KB result=forwardChain(perceptRules.union(percepts).union(believes)); 
+		System.out.println(result.rules());
 		//System.out.println("PERCEPT INFERENCE:\n"+result);//uncomment this if you want to know what facts your forward chaining inference produces
 		//processFacts(result, believes, desires, intentions, DEBUG);
 	}
