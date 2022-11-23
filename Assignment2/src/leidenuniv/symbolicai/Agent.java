@@ -18,7 +18,7 @@ public abstract class Agent {
 	boolean HUMAN_DECISION=false;//change to false if you want the decide step to make the decision rather than you (check code there)
 	//boolean HUMAN_DECISION=true;//change to false if you want the decide step to make the decision rather than you (check code there)
 	//boolean DEBUG=true;
-	boolean DEBUG=false;
+	boolean DEBUG=true;
 	
 	public Agent() {
 		believes=new KB();
@@ -51,11 +51,10 @@ public abstract class Agent {
 		KB percepts=w.generatePercepts();
 		if (DEBUG) System.out.println("PERCEPTS:\n"+percepts);
 		
-		System.out.println(perceptRules.union(percepts).union(believes));
+		// System.out.println(perceptRules.union(percepts).union(believes));
 		KB result=forwardChain(perceptRules.union(percepts).union(believes)); 
-		System.out.println(result.rules());
 		//System.out.println("PERCEPT INFERENCE:\n"+result);//uncomment this if you want to know what facts your forward chaining inference produces
-		//processFacts(result, believes, desires, intentions, DEBUG);
+		processFacts(result, believes, desires, intentions, DEBUG);
 	}
 	public void think(KB b, KB d, KB i) {
 		//In the think phase, your forward chaining algorithm runs on 
@@ -67,6 +66,9 @@ public abstract class Agent {
 		KB facts=forwardChain(programRules.union(b)); 
 		//System.out.println("THINK INFERENCE:\n"+facts);//uncomment this if you want to know what facts your forward chaining inference produces
 		processFacts(facts, b, d, i, DEBUG);
+		// System.out.println("CHECK KB beliefs: "+b);
+		// System.out.println("CHECK KB desires: "+d);
+		// System.out.println("CHECK KB intentions: "+i);
 	}
 	public Predicate decide(boolean humanActor) {
 		//Returns an action (so this method solves the action selection problem).

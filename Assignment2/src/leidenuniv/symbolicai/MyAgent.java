@@ -23,21 +23,21 @@ public class MyAgent extends Agent {
 		//These are then processed by processFacts() (which is already implemented for you)
 		//HINT: You should assume that forwardChain only allows *bound* predicates to be added to the facts list for now.
 		KB newKB = new KB(); 
-		KB factsKB = new KB(); 
+
+		// System.out.println("Starting KB: " + kb);
 
 		HashMap<String, Predicate> facts = new HashMap<>();
 		for(Sentence sentence:kb.rules()){
 			for(Predicate element:sentence.conclusions){
-				System.out.println(element.bound());
+				// System.out.println(element.bound());
 				if(element.bound()){
 					facts.put(element.toString(), element); 
 				}
 			}
-		
 		}
 		for(Sentence sentence:kb.rules()){
-			System.out.println(sentence); 
-			System.out.println(facts);
+			// System.out.println(sentence); 
+			// System.out.println(facts);
 			HashMap<String, String> substitution = new HashMap<>();
 			Collection<HashMap<String, String>> collection = new HashSet<>();
 			boolean allSubs = findAllSubstitions(collection, substitution,sentence.conditions,facts);
@@ -49,14 +49,13 @@ public class MyAgent extends Agent {
 						newKB.add(newSentence);
 					}
 				}
-				System.out.println(sentence);
-				System.out.println(newKB.rules()); 
-				
+				// System.out.println(sentence);
+				// System.out.println(newKB.rules()); 
 			}
 		}
-		processFacts(newKB, kb ,null, null, DEBUG);
-		System.out.println("ikweethetniet: "+kb); 
-		return kb;
+		// processFacts(newKB, kb ,null, kb, DEBUG);
+		// System.out.println("ikweethetniet: "+newKB); 
+		return newKB;
 	}
 
 	@Override
@@ -99,7 +98,7 @@ public class MyAgent extends Agent {
 			}
 		} else{
 			allSubstitutions.add(substitution);
-			System.out.println(allSubstitutions);
+			// System.out.println(allSubstitutions);
 		}
 		return !allSubstitutions.isEmpty();
 	} 
