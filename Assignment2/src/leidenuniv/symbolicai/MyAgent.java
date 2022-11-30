@@ -29,15 +29,12 @@ public class MyAgent extends Agent {
 		HashMap<String, Predicate> facts = new HashMap<>();
 		for(Sentence sentence:kb.rules()){
 			for(Predicate element:sentence.conclusions){
-				// System.out.println(element.bound());
-				if(element.bound()){
+				if(element.bound() && sentence.conditions.isEmpty()){
 					facts.put(element.toString(), element); 
 				}
 			}
 		}
 		for(Sentence sentence:kb.rules()){
-			// System.out.println(sentence); 
-			// System.out.println(facts);
 			HashMap<String, String> substitution = new HashMap<>();
 			Collection<HashMap<String, String>> collection = new HashSet<>();
 			boolean allSubs = findAllSubstitions(collection, substitution,sentence.conditions,facts);
@@ -49,11 +46,8 @@ public class MyAgent extends Agent {
 						newKB.add(newSentence);
 					}
 				}
-				// System.out.println(sentence);
-				// System.out.println(newKB.rules()); 
 			}
 		}
-		// processFacts(newKB, kb ,null, kb, DEBUG);
 		// System.out.println("ikweethetniet: "+newKB); 
 		return newKB;
 	}
@@ -68,6 +62,7 @@ public class MyAgent extends Agent {
 		//substitution is the one we are currently building recursively.
 		//conditions is the list of conditions you  still need to find a subst for (this list shrinks the further you get in the recursion).
 		//facts is the list of predicates you need to match against (find substitutions so that a predicate form the conditions unifies with a fact)
+		Vector<Boolean> negatedVector = new Vector<>();
 		if(!conditions.isEmpty()){
 			for(Predicate unifiedValue:facts.values()){
 				Vector<Predicate> newConditions = new Vector<>(conditions);
@@ -84,6 +79,13 @@ public class MyAgent extends Agent {
 					if(!result.not()){
 						continue;
 					}
+				} else if(newConditions.get(0).neg){
+					System.out.println("NEW NEW: "+newConditions.get(0));
+					Predicate result = substitute(newConditions.get(0), newHashmap);
+					unifiedMap= unifiesWith(result, unifiedValue);
+					if(unifiedMap==null){
+						continue;  
+					}
 				}
 				else{
 					//Result by substitute with given substitutions
@@ -98,7 +100,6 @@ public class MyAgent extends Agent {
 			}
 		} else{
 			allSubstitutions.add(substitution);
-			// System.out.println(allSubstitutions);
 		}
 		return !allSubstitutions.isEmpty();
 	} 
@@ -113,6 +114,12 @@ public class MyAgent extends Agent {
 		//If no subst is found it returns null
 		HashMap<String, String> map = new HashMap<>();
 		int index = 0;
+		if(p.neg){
+			if(!p.getName().equals(f.getName())){
+				return map; 
+			}
+		}
+
 		if(p.getName().equals(f.getName())&&p.getTerms().size()==f.getTerms().size()){
 			for(Term pterm:p.getTerms()){
 				Term fterm = f.getTerm(index);
