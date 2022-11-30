@@ -21,7 +21,7 @@ public class RunMe {
 		a.loadKnowledgeBase("actions", new File("data/actions.txt"));
 		
 		//If you need to test on a simpler file, you may use this one and comment out all the other KBs:
-		//a.loadKnowledgeBase("program", new File("data/family.txt"));
+		// a.loadKnowledgeBase("program", new File("data/family.txt"));
 		
 		Scanner io= new Scanner(System.in);
 		

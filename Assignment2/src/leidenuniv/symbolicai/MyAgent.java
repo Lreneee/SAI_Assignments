@@ -45,6 +45,10 @@ public class MyAgent extends Agent {
 						Sentence newSentence = new Sentence(substitutedPredicate.toString()); 
 						newKB.add(newSentence);
 					}
+					else if(conclusion.bound()){
+						Sentence newSentence = new Sentence(conclusion.toString());
+						newKB.add(newSentence);
+					}
 				}
 			}
 		}
@@ -79,14 +83,28 @@ public class MyAgent extends Agent {
 					if(!result.not()){
 						continue;
 					}
-				} else if(newConditions.get(0).neg){
-					System.out.println("NEW NEW: "+newConditions.get(0));
-					Predicate result = substitute(newConditions.get(0), newHashmap);
-					unifiedMap= unifiesWith(result, unifiedValue);
-					if(unifiedMap==null){
-						continue;  
-					}
-				}
+				} 
+				// else if(newConditions.get(0).neg){
+				// 	if(newConditions.get(0).bound()){
+				// 		System.out.println("condition bound");
+				// 		String resultWithoutExcl = newConditions.get(0).toString().substring(1);
+				// 		if(resultWithoutExcl.equals(unifiedValue.toString())){
+				// 			continue;
+				// 		}
+				// 	} else{
+				// 		// System.out.println("NEW NEW: "+newConditions.get(0));
+				// 		// System.out.println("NEW NEW hash: "+newHashmap);
+				// 		Predicate result = substitute(newConditions.get(0), newHashmap);
+				// 		System.out.println("NEW NEW RESULT: "+result);
+				// 		System.out.println("NEW NEW value: "+unifiedValue);
+				// 		unifiedMap= unifiesWith(result, unifiedValue);
+				// 		System.out.println("NEW NEW map: "+unifiedMap);
+				// 		if(unifiedMap==null){
+				// 			continue;  
+				// 		}
+				// 	}
+					
+				// }
 				else{
 					//Result by substitute with given substitutions
 					Predicate result = substitute(newConditions.get(0), newHashmap); 
