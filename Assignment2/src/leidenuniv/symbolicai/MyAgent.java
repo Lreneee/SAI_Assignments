@@ -75,14 +75,19 @@ public class MyAgent extends Agent {
 				if(newConditions.get(0).eql){
 					Predicate result = substitute(newConditions.get(0), newHashmap);
 					if(!result.eql()){
-						continue;
+						unifiedMap = null;
 					}
 				} else if(newConditions.get(0).not){
 					Predicate result = substitute(newConditions.get(0), newHashmap);
 					if(!result.not()){
-						continue;
+						unifiedMap = null;
 					}
-				} 
+				} else if(newConditions.get(0).neg){
+					Predicate conditionWithoutExl = new Predicate(newConditions.get(0).toString().substring(1));
+					if(unifiesWith(conditionWithoutExl, unifiedValue) != null){
+						unifiedMap = null;
+					}
+				}
 				// else if(newConditions.get(0).neg){
 				// 	if(newConditions.get(0).bound()){
 				// 		System.out.println("condition bound");
@@ -131,11 +136,11 @@ public class MyAgent extends Agent {
 		//If no subst is found it returns null
 		HashMap<String, String> map = new HashMap<>();
 		int index = 0;
-		if(p.neg){
-			if(!p.getName().equals(f.getName())){
-				return map; 
-			}
-		}
+		// if(p.neg){
+		// 	if(!p.getName().equals(f.getName())){
+		// 		return map; 
+		// 	}
+		// }
 
 		if(p.getName().equals(f.getName())&&p.getTerms().size()==f.getTerms().size()){
 			for(Term pterm:p.getTerms()){
