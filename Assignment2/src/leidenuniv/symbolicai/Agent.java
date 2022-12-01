@@ -39,7 +39,7 @@ public abstract class Agent {
 		intentions=new KB(); //clear the list of intentions (=possible actions), as we start a cycle
 		sense(w);
 		think(believes,desires,intentions);
-		//act(w, decide(HUMAN_DECISION), believes, desires);
+		act(w, decide(HUMAN_DECISION), believes, desires);
 	}
 	public void sense(Maze w) {
 		//The world generates percepts for you every cycle

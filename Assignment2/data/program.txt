@@ -9,7 +9,7 @@
 #Add your program rules below
 at(X)&key(K)>_grab(X,K)
 at(X)&locked(K)&hasKey(K)>_open(X,K)
-at(X)&link(X,Y)>_goto(Y)
+at(X)&link(X,Y)&!visited(Y)>_goto(Y)
 
 locked(K)&!hasKey(K)>*hasKey(K)
 link(X,Y)&!visited(Y)>*visited(Y)

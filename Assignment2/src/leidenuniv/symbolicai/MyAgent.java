@@ -66,7 +66,6 @@ public class MyAgent extends Agent {
 		//substitution is the one we are currently building recursively.
 		//conditions is the list of conditions you  still need to find a subst for (this list shrinks the further you get in the recursion).
 		//facts is the list of predicates you need to match against (find substitutions so that a predicate form the conditions unifies with a fact)
-		Vector<Boolean> negatedVector = new Vector<>();
 		if(!conditions.isEmpty()){
 			for(Predicate unifiedValue:facts.values()){
 				Vector<Predicate> newConditions = new Vector<>(conditions);
