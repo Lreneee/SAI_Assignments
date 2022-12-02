@@ -35,21 +35,22 @@ public class MyAgent extends Agent {
 			HashMap<String, String> substitution = new HashMap<>();
 			Collection<HashMap<String, String>> collection = new HashSet<>();
 			boolean allSubs = findAllSubstitions(collection, substitution,sentence.conditions,facts);
-			for(HashMap<String,String> hashmap:collection){
-				for(Predicate conclusion:sentence.conclusions){
-					if(!conclusion.bound()){
-						Predicate substitutedPredicate = substitute(conclusion, hashmap); 
-						Sentence newSentence = new Sentence(substitutedPredicate.toString()); 
-						newKB.add(newSentence);
-					}
-					else if(conclusion.bound()){
-						Sentence newSentence = new Sentence(conclusion.toString());
-						newKB.add(newSentence);
+			if(allSubs){
+				for(HashMap<String,String> hashmap:collection){
+					for(Predicate conclusion:sentence.conclusions){
+						if(!conclusion.bound()){
+							Predicate substitutedPredicate = substitute(conclusion, hashmap); 
+							Sentence newSentence = new Sentence(substitutedPredicate.toString()); 
+							newKB.add(newSentence);
+						}
+						else if(conclusion.bound()){
+							Sentence newSentence = new Sentence(conclusion.toString());
+							newKB.add(newSentence);
+						}
 					}
 				}
-			}
+			} 
 		}
-		// System.out.println("ikweethetniet: "+newKB); 
 		return newKB;
 	}
 
@@ -123,12 +124,6 @@ public class MyAgent extends Agent {
 		//If no subst is found it returns null
 		HashMap<String, String> map = new HashMap<>();
 		int index = 0;
-		// if(p.neg){
-		// 	if(!p.getName().equals(f.getName())){
-		// 		return map; 
-		// 	}
-		// }
-
 		if(p.getName().equals(f.getName())&&p.getTerms().size()==f.getTerms().size()){
 			for(Term pterm:p.getTerms()){
 				Term fterm = f.getTerm(index);
