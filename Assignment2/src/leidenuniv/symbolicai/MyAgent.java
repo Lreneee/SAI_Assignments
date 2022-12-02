@@ -23,9 +23,6 @@ public class MyAgent extends Agent {
 		//These are then processed by processFacts() (which is already implemented for you)
 		//HINT: You should assume that forwardChain only allows *bound* predicates to be added to the facts list for now.
 		KB newKB = new KB(); 
-
-		// System.out.println("Starting KB: " + kb);
-
 		HashMap<String, Predicate> facts = new HashMap<>();
 		for(Sentence sentence:kb.rules()){
 			for(Predicate element:sentence.conclusions){
@@ -66,6 +63,7 @@ public class MyAgent extends Agent {
 		//substitution is the one we are currently building recursively.
 		//conditions is the list of conditions you  still need to find a subst for (this list shrinks the further you get in the recursion).
 		//facts is the list of predicates you need to match against (find substitutions so that a predicate form the conditions unifies with a fact)
+		Vector<Integer> negatedVector = new Vector<>(); 
 		if(!conditions.isEmpty()){
 			for(Predicate unifiedValue:facts.values()){
 				Vector<Predicate> newConditions = new Vector<>(conditions);
@@ -74,11 +72,13 @@ public class MyAgent extends Agent {
 
 				if(newConditions.get(0).eql){
 					Predicate result = substitute(newConditions.get(0), newHashmap);
+					negatedVector.add(0);
 					if(!result.eql()){
 						unifiedMap = null;
 					}
 				} else if(newConditions.get(0).not){
 					Predicate result = substitute(newConditions.get(0), newHashmap);
+					negatedVector.add(0);
 					if(!result.not()){
 						unifiedMap = null;
 					}
@@ -86,33 +86,20 @@ public class MyAgent extends Agent {
 					Predicate conditionWithoutExl = new Predicate(newConditions.get(0).toString().substring(1));
 					if(unifiesWith(conditionWithoutExl, unifiedValue) != null){
 						unifiedMap = null;
+						negatedVector.add(1); 
+					} else{
+						negatedVector.add(0); 
 					}
-				}
-				// else if(newConditions.get(0).neg){
-				// 	if(newConditions.get(0).bound()){
-				// 		System.out.println("condition bound");
-				// 		String resultWithoutExcl = newConditions.get(0).toString().substring(1);
-				// 		if(resultWithoutExcl.equals(unifiedValue.toString())){
-				// 			continue;
-				// 		}
-				// 	} else{
-				// 		// System.out.println("NEW NEW: "+newConditions.get(0));
-				// 		// System.out.println("NEW NEW hash: "+newHashmap);
-				// 		Predicate result = substitute(newConditions.get(0), newHashmap);
-				// 		System.out.println("NEW NEW RESULT: "+result);
-				// 		System.out.println("NEW NEW value: "+unifiedValue);
-				// 		unifiedMap= unifiesWith(result, unifiedValue);
-				// 		System.out.println("NEW NEW map: "+unifiedMap);
-				// 		if(unifiedMap==null){
-				// 			continue;  
-				// 		}
-				// 	}
-					
-				// }
-				else{
+				} else{
 					//Result by substitute with given substitutions
+					negatedVector.add(0);
 					Predicate result = substitute(newConditions.get(0), newHashmap); 
 					unifiedMap= unifiesWith(result, unifiedValue);
+				}
+				if(negatedVector.size() == facts.size()){
+					if(negatedVector.contains(1)){
+						return false; 
+					}
 				}
 				if(unifiedMap!=null){
 					newHashmap.putAll(unifiedMap);
