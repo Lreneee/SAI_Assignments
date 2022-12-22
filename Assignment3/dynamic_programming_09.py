@@ -100,9 +100,7 @@ class Dynamic_Programming:
                     next_state, reward = env.transition_function(current_state, action)
                     V_a[action] = reward + self.V_s[next_state]
                 G_s = max(V_a, key=V_a.get)
-                    # p_list.append(G_s)
 
-                # print(p_list)
                 greedy_action = G_s # replace this!/
                 
             
