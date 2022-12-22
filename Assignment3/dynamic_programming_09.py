@@ -8,6 +8,7 @@ By Thomas Moerland
 """
 
 import numpy as np
+import time
 # from world import World
 from world_09 import World
 
@@ -29,23 +30,24 @@ class Dynamic_Programming:
         is_converged = False
 
         while not is_converged:
-            V_S_temp = np.zeros(env.n_states)
+            V_s_temp = np.zeros(env.n_states)
             for state in env.states:
-                v_list = []
                 delta = 0
-                current_state_value = V_s[state]
-                for action in env.actions:
-                    next_state, reward = env.transition_function(state, action)
-                    reward_value = reward+gamma*V_s[next_state]
+                V_s_temp[state] = V_s[state]
+                v_list = []
+                for action in range(env.n_actions):
+                    current_action = env.actions[action];
+                    next_state, reward = env.transition_function(state, current_action)
+                    reward_value = reward + gamma * V_s[next_state]
                     v_list.append(reward_value)
-                V_S_temp[state] = max(v_list)
-                delta = max(delta, abs(V_S_temp[state] - current_state_value))
+                V_s[state] = max(v_list)
+
+                delta = max(delta, abs(V_s[state] - V_s_temp[state]))
                 delta_s[state] = delta
-            V_s = V_S_temp
-            if all(i < theta for i in delta_s):
-                is_converged = True
-        self.V_s = V_s
+                if all(i < theta for i in delta_s):
+                    is_converged = True
         print(V_s)
+        self.V_s = V_s
         return
 
     def Q_value_iteration(self,env,gamma = 1.0, theta=0.001):
@@ -77,8 +79,6 @@ class Dynamic_Programming:
                 delta_sa[state] = max(delta_temp)
                 if all(i < theta for i in delta_sa):
                     is_converged = True
-        ## IMPLEMENT YOUR Q-VALUE ITERATION ALGORITHM HERE
-        print("You still need to implement Q-value iteration!")
         print(Q_sa)
         self.Q_sa = Q_sa
         return
@@ -94,7 +94,6 @@ class Dynamic_Programming:
             # Compute action values
             if table == 'V' and self.V_s is not None:
                 ## IMPLEMENT ACTION VALUE ESTIMATION FROM self.V_s HERE !!!
-                print("You still need to implement greedy action selection from the value table self.V_s!")
                 V_a = {}
                 for action in available_actions:
                     next_state, reward = env.transition_function(current_state, action)
@@ -106,13 +105,8 @@ class Dynamic_Programming:
             
             elif table == 'Q' and self.Q_sa is not None:
                 ## IMPLEMENT ACTION VALUE ESTIMATION FROM self.Q_sa here !!!
-                
-                print("You still need to implement greedy action selection from the state-action value table self.Q_sa!")
-                Q_a = {}
-                for action in available_actions:
-                    next_state, reward = env.transition_function(current_state, action)
-                    Q_a[action] = reward + max(self.Q_sa[next_state])
-                G_s = max(Q_a, key=Q_a.get)
+                action = np.argmax(self.Q_sa[current_state])
+                G_s = available_actions[action]
                 greedy_action = G_s # replace this!
                 
                 
@@ -152,18 +146,24 @@ def get_greedy_index(action_values):
     return np.where(action_values == np.max(action_values))
     
 if __name__ == '__main__':
-    env = World('prison_09.txt')
+    env = World('prison_09_02.txt')
     DP = Dynamic_Programming()
 
-    #Run value iteration
-    # input('Press enter to run value iteration')
-    # optimal_V_s = DP.value_iteration(env)
+    # #Run value iteration
+    input('Press enter to run value iteration')
+    tic = time.perf_counter()
+    optimal_V_s = DP.value_iteration(env)
+    toc = time.perf_counter()
+    print(f"Calculated value in {toc - tic:0.4f} seconds")
     # input('Press enter to start execution of optimal policy according to V')
     # DP.execute_policy(env, table='V') # execute the optimal policy
-    #
+    
     # Once again with Q-values:
     input('Press enter to run Q-value iteration')
+    tic = time.perf_counter()
     optimal_Q_sa = DP.Q_value_iteration(env)
-    input('Press enter to start execution of optimal policy according to Q')
-    DP.execute_policy(env, table='Q') # execute the optimal policy
+    toc = time.perf_counter()
+    print(f"Calculated value in {toc - tic:0.4f} seconds")
+    # input('Press enter to start execution of optimal policy according to Q')
+    # DP.execute_policy(env, table='Q') # execute the optimal policy
 
