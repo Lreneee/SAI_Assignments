@@ -110,7 +110,12 @@ class Dynamic_Programming:
                 ## IMPLEMENT ACTION VALUE ESTIMATION FROM self.Q_sa here !!!
                 
                 print("You still need to implement greedy action selection from the state-action value table self.Q_sa!")
-                greedy_action = None # replace this!
+                Q_a = {}
+                for action in available_actions:
+                    next_state, reward = env.transition_function(current_state, action)
+                    Q_a[action] = reward + max(self.Q_sa[next_state])
+                G_s = max(Q_a, key=Q_a.get)
+                greedy_action = G_s # replace this!
                 
                 
             else:
