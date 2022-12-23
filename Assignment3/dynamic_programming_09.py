@@ -46,7 +46,7 @@ class Dynamic_Programming:
                 delta_s[state] = delta
                 if all(i < theta for i in delta_s):
                     is_converged = True
-        print(V_s)
+        # print(V_s.size) # uncomment to see what values have been measured
         self.V_s = V_s
         return
 
@@ -79,7 +79,7 @@ class Dynamic_Programming:
                 delta_sa[state] = max(delta_temp)
                 if all(i < theta for i in delta_sa):
                     is_converged = True
-        print(Q_sa)
+        # print(Q_sa) # uncomment to see what values have been measured
         self.Q_sa = Q_sa
         return
                 
@@ -151,19 +151,19 @@ if __name__ == '__main__':
 
     # #Run value iteration
     input('Press enter to run value iteration')
-    tic = time.perf_counter()
+    # tic = time.perf_counter()   # get first time for timer
     optimal_V_s = DP.value_iteration(env)
-    toc = time.perf_counter()
-    print(f"Calculated value in {toc - tic:0.4f} seconds")
-    # input('Press enter to start execution of optimal policy according to V')
-    # DP.execute_policy(env, table='V') # execute the optimal policy
+    # toc = time.perf_counter()   #get second time for timer
+    # print(f"Calculated value in {toc - tic:0.4f} seconds") # see how long it took to calculate the values (using tic and toc)
+    input('Press enter to start execution of optimal policy according to V')
+    DP.execute_policy(env, table='V') # execute the optimal policy
     
     # Once again with Q-values:
-    input('Press enter to run Q-value iteration')
-    tic = time.perf_counter()
-    optimal_Q_sa = DP.Q_value_iteration(env)
-    toc = time.perf_counter()
-    print(f"Calculated value in {toc - tic:0.4f} seconds")
+    # input('Press enter to run Q-value iteration')
+    # tic = time.perf_counter() # get first time for timer
+    # optimal_Q_sa = DP.Q_value_iteration(env)
+    # toc = time.perf_counter() #get second time for timer
+    # print(f"Calculated value in {toc - tic:0.4f} seconds")    # see how long it took to calculate the values (using tic and toc)
     # input('Press enter to start execution of optimal policy according to Q')
     # DP.execute_policy(env, table='Q') # execute the optimal policy
 
